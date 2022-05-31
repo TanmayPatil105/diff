@@ -30,6 +30,7 @@ Refer : [diff command](https://man7.org/linux/man-pages/man1/diff.1.html)
 
 ## Time taken
 The time taken by the program to compare files is less than that of the diff command for files of small sizes and nearly the same for files of large size
+
 ![Screenshot from 2022-05-31 18-00-18](https://user-images.githubusercontent.com/92677342/171176214-81dfd718-e774-42f1-bab7-305cb15fc295.png)
 
 
