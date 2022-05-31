@@ -1,5 +1,5 @@
 # README
-This is a program to mimic the working of the Unix command `diff` that prints the contents of a textfile (implementation in C)
+This is a program to mimic the working of the Unix command `diff` used to display the differences in the files by comparing the files line by line. (implementation in C)
 
 Refer : [diff command](https://man7.org/linux/man-pages/man1/diff.1.html)
 
