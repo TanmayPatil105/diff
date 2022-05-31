@@ -4,8 +4,8 @@ This is a program to mimic the working of the Unix command `diff` used to displa
 Refer : [diff command](https://man7.org/linux/man-pages/man1/diff.1.html)
 
 ## Note 
-- Limit of 128 chars in a line
-- Limit of 128 lines in a file
+- Max Characters per line : 128
+- Max Lines per file : 128
 
 ## Executing the program
 
