@@ -24,6 +24,4 @@ int main(int argc,char *argv[]){
 		printf("diff: missing operand after '%s'",argv[1]);
         printf("\ndiff: Try 'diff --help' for more information.\n");
     }
-    //printf("%d ",NoOfLines(argv[1]));
-    //printf("%d ",NoOfLines(argv[2]));
 }
