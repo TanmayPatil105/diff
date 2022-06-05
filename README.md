@@ -15,11 +15,23 @@ Refer : [diff command](https://man7.org/linux/man-pages/man1/diff.1.html)
 
 ### To execute the program
 
-`./diff <file1_name> <file2_name>`
+`./diff <file1_name> <file2_name> [options]`
 
 ###### For Example 
 
 `./diff file1.txt file2.txt`
+
+### Different ways to view diff command
+
+`./diff <file1_name> <file2_name> --normal`
+
+`./diff <file1_name> <file2_name> --color`
+
+`./diff <file1_name> <file2_name> -s`
+
+`./diff <file1_name> <file2_name> -q`
+
+`./diff <file1_name> <file2_name> -u`
 
 ## Output 
 
