@@ -23,14 +23,21 @@ Refer : [diff command](https://man7.org/linux/man-pages/man1/diff.1.html)
 
 ### Different ways to view diff command
 
+--normal
+              output a normal diff (the default)
 `./diff <file1_name> <file2_name> --normal`
-
+--color[=WHEN]
+              colorize the output; WHEN can be 'never', 'always', or
+              'auto' (the default)
 `./diff <file1_name> <file2_name> --color`
-
+-s, --report-identical-files
+              report when two files are the same
 `./diff <file1_name> <file2_name> -s`
-
+-q, --brief
+              report only when files differ
 `./diff <file1_name> <file2_name> -q`
-
+-u, -U NUM, --unified[=NUM]
+              output NUM (default 3) lines of unified context
 `./diff <file1_name> <file2_name> -u`
 
 ## Output 
