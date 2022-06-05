@@ -11,7 +11,7 @@ int main(int argc,char *argv[]){
         return 1;
     }
     if(strcmp(argv[1], "--help") == 0) {
-		printhelp();
+	printhelp();
         return 1;
 	}
     else if(argc==3 || argc==4){
