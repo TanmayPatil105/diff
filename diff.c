@@ -2,9 +2,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #define MAX_LINES 128
 #define MAX_CHARS 128
+
+char *color="--color";
+char *same="-s";
+char *differ="-q";
+char *normal="--normal";
+char *uni="-u";
 
 
 #define max a>b?a:b
@@ -43,7 +52,6 @@ int checkFiles(char *file1,char *file2){
     fclose(fptr2);
     return 0;
 }
-
 
 int NoOfLines(char* file){
     FILE *fptr = fopen(file, "r");
@@ -107,7 +115,6 @@ void LinesToArray(char **arr1,char **arr2,int l1,int l2,FILE *fptr1,FILE *fptr2)
     }
 }
 
-
 void LCSmatrix(char **arr1,char **arr2,int **LCS,int **BACK,int l1,int l2){
     int x=0,y=0;
     LCS[0][0]=0;
@@ -161,85 +168,122 @@ void LCSmatrix(char **arr1,char **arr2,int **LCS,int **BACK,int l1,int l2){
     }
 }
 
-void BackTrackR(char **arr1,char **arr2,int **LCS,int **BACK,int x,int y){
+
+//  FUNCTIONALITIES OF DIFF COMMANDS
+
+void NormalDiff(char **arr1,char **arr2,int **LCS,int **BACK,int x,int y){
     if(x==0 && y==0){
         return;
     }
     if(BACK[x][y]==3){
         if(LCS[x][y]!=LCS[x-1][y-1]){
-            BackTrackR(arr1,arr2,LCS,BACK,x-1,y-1);
+            NormalDiff(arr1,arr2,LCS,BACK,x-1,y-1);
             printf("%dc%d\n< %s\n---\n> %s\n",x,y,arr1[x-1],arr2[y-1]);
         }
         else {
-            BackTrackR(arr1,arr2,LCS,BACK,x-1,y-1);
+            NormalDiff(arr1,arr2,LCS,BACK,x-1,y-1);
         }
     }
     else if(BACK[x][y]==2){
         if(LCS[x][y]!=LCS[x][y-1]){
-            BackTrackR(arr1,arr2,LCS,BACK,x,y-1);
+            NormalDiff(arr1,arr2,LCS,BACK,x,y-1);
             printf("%da%d\n< %s\n",x,y,arr2[y-1]);
         }
         else {
-            BackTrackR(arr1,arr2,LCS,BACK,x-1,y-1);
+            NormalDiff(arr1,arr2,LCS,BACK,x-1,y-1);
         }
     }
     else if(BACK[x][y]==1){
         if(LCS[x][y]!=LCS[x-1][y]){
-            BackTrackR(arr1,arr2,LCS,BACK,x-1,y);
+            NormalDiff(arr1,arr2,LCS,BACK,x-1,y);
             printf("%dd%d\n< %s\n",x,y,arr1[x-1]);
         }
         else {
-            BackTrackR(arr1,arr2,LCS,BACK,x-1,y);
+            NormalDiff(arr1,arr2,LCS,BACK,x-1,y);
         }
     }
     else {
-        BackTrackR(arr1,arr2,LCS,BACK,x-1,y-1);
+        NormalDiff(arr1,arr2,LCS,BACK,x-1,y-1);
     }
 }
 
-void BackTrack(char **arr1,char **arr2,int **LCS,int **BACK,int x,int y){
-    while(x!=0 && y!=0){
-        if(BACK[x][y]==3){
-            if(LCS[x][y]!=LCS[x-1][y-1]){
-                printf("%dc%d\n< %s\n---\n> %s\n",x,y,arr1[x-1],arr2[y-1]);
-                x=x-1;
-                y=y-1;
-            }
-            else {
-                x=x-1;
-                y=y-1;
-            }
-        }
-        else if(BACK[x][y]==2){
-            if(LCS[x][y]!=LCS[x][y-1]){
-                printf("%da%d\n< %s\n",x,y,arr2[y-1]);
-                x=x;
-                y=y-1;
-            }
-            else {
-                x=x;
-                y=y-1;
-            }
-        }
-        else if(BACK[x][y]==1){
-            if(LCS[x][y]!=LCS[x-1][y]){
-                printf("%dd%d\n< %s\n",x,y,arr1[x-1]);
-                x=x-1;
-                y=y;
-            }
-            else {
-                x=x-1;
-                y=y;
-            }
+void ColorDiff(char **arr1,char **arr2,int **LCS,int **BACK,int x,int y){
+    if(x==0 && y==0){
+        return;
+    }
+    if(BACK[x][y]==3){
+        if(LCS[x][y]!=LCS[x-1][y-1]){
+            ColorDiff(arr1,arr2,LCS,BACK,x-1,y-1);
+            printf("\033[0;36m%dc%d \033[0;37m \n\033[0;31m<%s\n\033[0;37m---\n\033[0;32m>%s\n",x,y,arr1[x-1],arr2[y-1]);
         }
         else {
-            x=x-1;
-            y=y-1;
+            ColorDiff(arr1,arr2,LCS,BACK,x-1,y-1);
         }
+    }
+    else if(BACK[x][y]==2){
+        if(LCS[x][y]!=LCS[x][y-1]){
+            ColorDiff(arr1,arr2,LCS,BACK,x,y-1);
+            printf("\033[0;36m%da%d\n \033[0;32m<%s\n\033[0;37m",x,y,arr2[y-1]);
+        }
+        else {
+            ColorDiff(arr1,arr2,LCS,BACK,x-1,y-1);
+        }
+    }
+    else if(BACK[x][y]==1){
+        if(LCS[x][y]!=LCS[x-1][y]){
+            ColorDiff(arr1,arr2,LCS,BACK,x-1,y);
+            printf("\033[0;36m%dd%d\n\033[0;31m<%s\n\033[0;37m",x,y,arr1[x-1]);
+        }
+        else {
+            ColorDiff(arr1,arr2,LCS,BACK,x-1,y);
+        }
+    }
+    else {
+        ColorDiff(arr1,arr2,LCS,BACK,x-1,y-1);
     }
 }
 
-void diff(char *file1,char *file2){
+void UnionDiff(char **arr1,char **arr2,int **LCS,int **BACK,int x,int y){
+    if(x==0 && y==0){
+        return;
+    }
+    if(BACK[x][y]==3){
+        if(LCS[x][y]!=LCS[x-1][y-1]){
+            UnionDiff(arr1,arr2,LCS,BACK,x-1,y-1);
+            printf("-%s\n+%s\n",arr1[x-1],arr2[y-1]);
+        }
+        else {
+            UnionDiff(arr1,arr2,LCS,BACK,x-1,y-1);
+            printf(" %s\n",arr1[x-1]);
+        }
+    }
+    else if(BACK[x][y]==2){
+        if(LCS[x][y]!=LCS[x][y-1]){
+            UnionDiff(arr1,arr2,LCS,BACK,x,y-1);
+            printf("+%s\n",arr2[y-1]);
+        }
+        else {
+            UnionDiff(arr1,arr2,LCS,BACK,x-1,y-1);
+            printf(" %s\n",arr1[x-1]);
+        }
+    }
+    else if(BACK[x][y]==1){
+        if(LCS[x][y]!=LCS[x-1][y]){
+            UnionDiff(arr1,arr2,LCS,BACK,x-1,y);
+            printf("-%s\n",arr1[x-1]);
+        }
+        else {
+            UnionDiff(arr1,arr2,LCS,BACK,x-1,y);
+            printf(" %s\n",arr1[x-1]);
+        }
+    }
+    else {
+        UnionDiff(arr1,arr2,LCS,BACK,x-1,y-1);
+        printf(" %s\n",arr1[x-1]);
+    }
+}
+
+void diff(char *file1,char *file2,char *arg){
 
 
     FILE *fptr1=fopen(file1,"r");
@@ -291,8 +335,48 @@ void diff(char *file1,char *file2){
     //printBACK(BACK,l1,l2);
 
     //BACKTRACKING THE BACK MATRIX AND PRINTING THE OUTPUT
+
+
     int x=l1,y=l2;
-    BackTrackR(arr1,arr2,LCS,BACK,x,y);
+
+    if(arg==NULL){
+        NormalDiff(arr1,arr2,LCS,BACK,x,y);
+    }
+    else if(strcmp(arg,normal)==0){
+        NormalDiff(arr1,arr2,LCS,BACK,x,y);
+    }
+    else if(strcmp(arg,color)==0){
+        ColorDiff(arr1,arr2,LCS,BACK,x,y);
+    }
+    else if(strcmp(arg,differ)==0){
+        if(LCS[l1][l2]!=0){
+            printf("Files %s and %s differ\n",file1,file2);
+        }
+    }
+    else if(strcmp(arg,same)==0){
+        if(LCS[l1][l2]==0){
+            printf("Files %s and %s are identical\n",file1,file2);
+        }
+        else {
+            NormalDiff(arr1,arr2,LCS,BACK,x,y);
+        }
+    }
+    else if(strcmp(arg,uni)==0){
+        char t1[100] = "";
+        char t2[100] = "";
+        struct stat b1;
+        struct stat b2;
+        stat(file1,&b1);
+        stat(file2,&b2);
+        strftime(t1, 100, "%Y-%m-%d %H:%M:%s +0530\n", localtime( &b1.st_mtime));
+        strftime(t2, 100, "%Y-%m-%d %H:%M:%s +0530\n", localtime( &b2.st_mtime));
+        printf("--- %s      %s",file1,t1);
+        printf("+++ %s      %s",file2,t2);
+        printf("@@ -1,%d +1,%d @@\n",l1,l2);
+        UnionDiff(arr1,arr2,LCS,BACK,x,y);
+        printf("\\ No newline at end of file\n");
+    }
+
 
     free(arr1);
     free(arr2);
