@@ -33,6 +33,8 @@ Refer : [diff command](https://man7.org/linux/man-pages/man1/diff.1.html)
 
 `./diff <file1_name> <file2_name> -u`
 
+`./diff <file1_name> <file2_name> -c`
+
 ## Output 
 
 ![Screenshot from 2022-05-31 17-59-01](https://user-images.githubusercontent.com/92677342/171175597-492bf481-78d9-4902-94d8-8c8ad75f4f72.png)
