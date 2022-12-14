@@ -1,19 +1,15 @@
-name: build
+name: Testing
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: build
-      run: make
-    - name: testing
-      run: ./test/test.sh
-    - name: clean
-      run: make clean
+    - name: Testing
+      run: test/test.sh
