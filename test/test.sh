@@ -13,4 +13,5 @@ then
     echo -e "\nTest cases Passed!!"
 else  
     echo -e "\nTest cases Failed!!"
+    exit 1
 fi
