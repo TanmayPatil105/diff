@@ -1,4 +1,4 @@
-name: Testing
+name: build
 
 on:
   push:
@@ -12,9 +12,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: build
-      runs: make
+      run: make
     - name: testing
-      runs: ./test/test.sh
+      run: ./test/test.sh
     - name: clean
-      runs: make clean
-    
+      run: make clean
