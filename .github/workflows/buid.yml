@@ -1,0 +1,20 @@
+name: Testing
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: build
+      runs: make
+    - name: testing
+      runs: ./test/test.sh
+    - name: clean
+      runs: make clean
+    
