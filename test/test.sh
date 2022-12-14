@@ -1,8 +1,5 @@
 #!/bin/bash
 
-make clean
-
-make
 
 ./diff text1 text2 > output1
 
