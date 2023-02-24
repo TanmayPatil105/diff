@@ -22,7 +22,6 @@ int min(int a,int b,int c){
 
 
 //DIFF FUCNTION
-
 void diff(char *file1,char *file2,char *arg){
 
 
@@ -40,37 +39,27 @@ void diff(char *file1,char *file2,char *arg){
     }
     
     //ARRAYS TO STORE LINES OF FILES
-
     char **arr1=(char**)malloc(sizeof(char*)*l1);
     char **arr2=(char**)malloc(sizeof(char*)*l2);
 
-
     //LINES TO ARRAY
-
     LinesToArray(arr1,arr2,l1,l2,fptr1,fptr2);
 
 
     //LCS MATRIX 
-
     int **LCS=(int**)malloc(sizeof(int*)*(l1+1));
     for(int i=0;i<=l1;i++){
         LCS[i]=(int*)malloc(sizeof(int)*(l2+1));
     }
 
     //BACK MATRIX FOR BACKTRACKING
-
     int **BACK=(int**)malloc(sizeof(int*)*(l1+1)); 
     for(int i=0;i<=l1;i++){
         BACK[i]=(int*)malloc(sizeof(int)*(l2+1));
     }
     
     //GENERATING LCS AND BACK MATRIX
-
     LCSmatrix(arr1,arr2,LCS,BACK,l1,l2);
-
-
-    //printLCS(LCS,l1,l2);
-    //printBACK(BACK,l1,l2);
 
     //BACKTRACKING THE BACK MATRIX AND PRINTING THE OUTPUT
     int x=l1,y=l2;
@@ -123,12 +112,10 @@ int checkFiles(char *file1,char *file2){
         printf("diff: %s: No such file or directory",file1);
         printf("\ndiff: %s: No such file or directory\n",file2);
         return 1;
-    }
-    else if(fptr1==NULL){
+    }else if(fptr1==NULL){
         printf("diff: \'%s\': No such file or directory\n",file1);
         return 1;
-    }
-    else if(fptr2==NULL){
+    }else if(fptr2==NULL){
         printf("diff: '%s': No such file or directory\n",file2);
         return 1;
     }
@@ -220,14 +207,15 @@ void LCSmatrix(char **arr1,char **arr2,int **LCS,int **BACK,int l1,int l2){
     for(y=1;y<=l2;y++){
         BACK[0][y]=0;
     }
+
     for(x=1;x<=l1;x++){
         for(y=1;y<=l2;y++){
+
             int sub=0;
             int del,add,change,minim;
             if(strcmp(arr1[x-1],arr2[y-1])==0){
                 sub=0;
-            }
-            else {
+            }else {
                 sub=1;
             }
 
@@ -241,11 +229,9 @@ void LCSmatrix(char **arr1,char **arr2,int **LCS,int **BACK,int l1,int l2){
             
             if(minim==del){
                 BACK[x][y]=1;
-            }
-            else if(minim==add){
+            }else if(minim==add){
                 BACK[x][y]=2;
-            }
-            else if(minim==change){
+            }else if(minim==change){
                 BACK[x][y]=3;
             }
         }
@@ -254,7 +240,6 @@ void LCSmatrix(char **arr1,char **arr2,int **LCS,int **BACK,int l1,int l2){
 
 
 //  FUNCTIONALITIES OF DIFF COMMANDS
-
 void NormalDiff(char **arr1,char **arr2,int **LCS,int **BACK,int x,int y){
     if(x==0 && y==0){
         return;
